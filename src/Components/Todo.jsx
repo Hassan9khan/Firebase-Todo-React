@@ -1,3 +1,4 @@
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useRef, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
@@ -24,6 +25,16 @@ const Todo = () => {
     todo.splice(index, 1, editValue);
     setTodo([...todo]);
   }
+
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      console.log(uid);    
+    } else {
+      console.log('user is sign out');
+    }
+  });
 
   return (
     <>
