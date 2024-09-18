@@ -7,6 +7,7 @@ const Navbar = () => {
       <Link to="">Signin</Link>
       <Link to="Register">Register</Link>
       <Link to="Todo">Todo</Link>
+      <h1>created push git commit code</h1>
     </>
   );
 };
