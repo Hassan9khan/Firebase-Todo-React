@@ -55,7 +55,7 @@ const Todo = () => {
   return (
     <>
       <div className="min-h-screen	 flex justify-center text-center text-1xl bg-gradient-to-r from-[#2670d2] to-[#7bc0d3]">
-        <div className="sm:w-[35rem] w-[90%] h-max m-3 pb-5  text-center rounded-lg bg-white shadow-2xl shadow-black ">
+        <div className="sm:w-[35rem] w-[90%] h-max m-3 pb-5 mb-10  text-center rounded-lg bg-white shadow-2xl shadow-black ">
           <div className="flex justify-end ml-24 m-2">
             <button
               onClick={logOut}
