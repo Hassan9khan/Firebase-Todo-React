@@ -37,7 +37,7 @@ const Signin = () => {
       <div className="min-h-screen flex justify-center text-center text-1xl bg-gradient-to-r from-[#2670d2] to-[#7bc0d3]">
         <div className="sm:w-[35rem] w-[90%] h-max m-3 pb-5 text-center rounded-lg bg-white shadow-2xl shadow-black mt-[8%]">
           <h1 className="text-[#0d54b1] text-4xl font-bold pt-3 mb-9 m-4">
-            Login
+            Login User
           </h1>
           <form onSubmit={getValue}>
             <input

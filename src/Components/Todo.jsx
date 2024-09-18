@@ -2,7 +2,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import React, { useRef, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Todo = () => {
   const [todo, setTodo] = useState([]);
@@ -35,6 +35,7 @@ const Todo = () => {
       console.log(uid);
     } else {
       console.log("user is sign out");
+      navigate('/signin')
     }
   });
 
