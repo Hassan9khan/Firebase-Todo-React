@@ -63,8 +63,6 @@ const Todo = () => {
             >
               LOGOUT
             </button>
-            <h1>created push git commit code</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, animi! Suscipit, autem.</p>
           </div>
           <h1 className="text-[#0d54b1] text-4xl font-bold pt-3 mb-9 m-4">
             Todo App
