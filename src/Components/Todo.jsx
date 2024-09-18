@@ -1,11 +1,13 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import React, { useRef, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Todo = () => {
   const [todo, setTodo] = useState([]);
   const todoValue = useRef();
+  let navigate = useNavigate()
 
   const addTodo = (event) => {
     event.preventDefault();
@@ -30,16 +32,37 @@ const Todo = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
-      console.log(uid);    
+      console.log(uid);
     } else {
-      console.log('user is sign out');
+      console.log("user is sign out");
     }
   });
+
+  function logOut() {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        navigate('/signin')
+        
+      })
+      .catch((error) => {
+        console.log(error);
+        
+      });
+  }
 
   return (
     <>
       <div className="min-h-screen	 flex justify-center text-center text-1xl bg-gradient-to-r from-[#2670d2] to-[#7bc0d3]">
-        <div className="sm:w-[35rem] w-[90%] h-max m-3 pb-5 text-center rounded-lg bg-white shadow-2xl shadow-black">
+        <div className="sm:w-[35rem] w-[90%] h-max m-3 pb-5  text-center rounded-lg bg-white shadow-2xl shadow-black ">
+          <div className="flex justify-end ml-24 m-2">
+            <button
+              onClick={logOut}
+              className="btn btn-outline bg-white text-[#2670d2]  hover:text-white btn-primary"
+            >
+              LOGOUT
+            </button>
+          </div>
           <h1 className="text-[#0d54b1] text-4xl font-bold pt-3 mb-9 m-4">
             Todo App
           </h1>
@@ -72,9 +95,7 @@ const Todo = () => {
                 return (
                   <div key={index}>
                     <li className="sm:w-[29rem] w-[20rem] h-22 mt-2 flex items-center justify-between text-lg font-bold p-3 py-7 bg-[#e8ecf1]">
-                      <span>
-                        {index + 1}) {item}
-                      </span>
+                      {item}
 
                       <div>
                         <button

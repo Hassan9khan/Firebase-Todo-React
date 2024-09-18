@@ -60,8 +60,8 @@ const Signin = () => {
               Submit
             </button>
           </form>
-          <div className="flex justify-start  ml-[20%] m-4">
-            <Link to="register" className="text-sm text-blue-700 underline">
+          <div className="flex justify-start  ml-[21%] m-4">
+            <Link to="/" className="text-sm text-blue-700 underline">
               Not a User
             </Link>
           </div>
