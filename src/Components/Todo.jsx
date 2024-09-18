@@ -91,7 +91,7 @@ const Todo = () => {
           </form>
 
           <div className="flex justify-center  mt-7">
-            <ol className="flex justify-center flex-col-reverse">
+            <ul className="flex justify-center flex-col-reverse">
               {todo.map((item, index) => {
                 return (
                   <div key={index}>
@@ -118,7 +118,7 @@ const Todo = () => {
                   </div>
                 );
               })}
-            </ol>
+            </ul>
           </div>
         </div>
       </div>
