@@ -1,26 +1,82 @@
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  doc,
+  deleteDoc,
+  getDocs,
+} from "firebase/firestore";
 import React, { useRef, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { db } from "../config/config";
 
 const Todo = () => {
   const [todo, setTodo] = useState([]);
   const todoValue = useRef();
-  let navigate = useNavigate()
+  let navigate = useNavigate();
+  let newDate = new Date();
 
   const addTodo = (event) => {
     event.preventDefault();
-    todo.push(todoValue.current.value);
-    setTodo([...todo]);
-    todoValue.current.value = "";
+
+    async function addToStore() {
+      const todoText = todoValue.current.value;
+      todo.push(todoText);
+      setTodo([...todo]);
+      try {
+        const docRef = await addDoc(collection(db, "todos"), {
+          first: todoText,
+          createdAt: newDate.toLocaleString(),
+        });
+        console.log("Document written with ID: ", docRef.id);
+        todo.push({ text: todoText, id: docRef.id });
+      } catch (error) {
+        console.log(error);
+      }
+
+      todoValue.current.value = "";
+    }
+
+    addToStore();
   };
+
+  // Delete Todo Function
 
   function deleteTodo(index) {
     console.log("delete todo", index);
     todo.splice(index, 1);
     setTodo([...todo]);
   }
+
+  // async function deleteTodo(id, index) {
+  //   try {
+  //     console.log("Document ID to delete:", id);
+  //     const docRef = doc(db, "todos", id);
+  //     todo.splice(index, 1);
+  //     setTodo([...todo]);
+  //     await deleteDoc(docRef);
+  //     console.log("Document successfully deleted!");
+  //   } catch (e) {
+  //     console.log("Error deleting document: ", e);
+  //   }
+  // }
+
+  // async function deleteTodo(id , index) {
+  //   try {
+  //     console.log("Document ID to delete:", id);
+  //     const docRef = doc(db, "todos", id);
+  //     todo.splice(index , 1);
+  //     console.log("Updated todo list after deletion:", todo);
+  //     setTodo([...todo]);
+  //     await deleteDoc(docRef);
+  //     console.log("Document successfully deleted!");
+  //   } catch (e) {
+  //     console.log("Error deleting document: ", e);
+  //   }
+  // }
+
   function editTodo(index) {
     console.log("edit todo", index);
     const editValue = prompt("Enter New Value");
@@ -35,7 +91,7 @@ const Todo = () => {
       console.log(uid);
     } else {
       console.log("user is sign out");
-      navigate('/signin')
+      navigate("/signin");
     }
   });
 
@@ -43,14 +99,47 @@ const Todo = () => {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        navigate('/signin')
-        
+        navigate("/signin");
       })
       .catch((error) => {
         console.log(error);
-        
       });
   }
+
+  // const getData = async () => {
+  //   try {
+  //     const querySnapshot = await getDocs(collection(db, "todos")); // Reference the
+  //     const todos = querySnapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }));
+  //     console.log("Todos:", todos);
+  //   } catch (error) {
+  //     console.error("Error fetching documents: ", error);
+  //   }
+  // };
+  // getData();
+
+  const [arr , setArr ] = useState([])
+
+  async function getData() {
+  const querySnapshot = await getDocs(collection(db, "todos"));
+  querySnapshot.forEach((doc) => {
+    // console.log(doc.data());
+    arr.push(doc.data())
+    setArr([...arr]);
+  });
+  console.log(arr);
+  arr.map((item) => {
+    return (
+      <div key={item.id}>
+        <h1>{item.first}</h1>
+      </div>
+    )
+  })
+  
+  }
+  // getData()
 
   return (
     <>
@@ -59,11 +148,18 @@ const Todo = () => {
           <div className="flex justify-end ml-24 m-2">
             <button
               onClick={logOut}
-              className="btn btn-outline bg-white text-[#2670d2]  hover:text-white btn-primary"
+              className="btn btn-outline bg-white text-[#2670d2] mr-2 hover:text-white btn-primary"
             >
               LOGOUT
             </button>
+            <button
+              onClick={getData}
+              className="btn btn-outline bg-white text-[#2670d2]  hover:text-white btn-primary"
+            >
+              GET DATA
+            </button>
           </div>
+
           <h1 className="text-[#0d54b1] text-4xl font-bold pt-3 mb-9 m-4">
             Todo App
           </h1>
@@ -100,7 +196,7 @@ const Todo = () => {
 
                       <div>
                         <button
-                          onClick={() => deleteTodo(index)}
+                          onClick={() => deleteTodo(todo.id, index)}
                           className="text-2xl mx-2 text-[#8B0000]"
                         >
                           <MdDelete />
@@ -125,6 +221,5 @@ const Todo = () => {
     </>
   );
 };
-
 
 export default Todo;
